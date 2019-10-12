@@ -7,12 +7,13 @@
 <div class="row mt-4">
 
   
-    <div class="col-md-6">
+    <div class="col-lg-6">
 
           <!-- Card -->
           <div class="card mt-5 pb-2 mb-2">
               <!-- Card header -->
-              <div class="card-footer text-dark font-weight-bold">
+              <div class="card-footer pt-1 pb-1 text-dark font-weight-bold">
+                  <img src="{{ image.author_profile.photo.url }}" alt="" class="rounded-circle img-fluid mr-1" style="width: 50px;">
                   {{image.Author}}
                 </div>
 
@@ -29,7 +30,7 @@
 
     </div>
 
-    <div class="col-md-6">
+    <div class="col-lg-6">
 
       <!-- Card -->
       <div class="card mt-5 pb-2 mb-2">
@@ -60,11 +61,11 @@
 
                 {%csrf_token%}
                 <div class="form-row">
-                  <div class="col-md-10">
+                  <div class="col-lg-10">
                      {% bootstrap_form form%} 
                       <input type="hidden" value="{{image.pk}}" name="image_id">
                     </div>
-                  <div class="col-md-2 pt-4 pr-2">
+                  <div class="col-lg-2 pt-4 pr-2">
                       <button type="submit" class="btn btn-default btn-sm font-weight-bold" value="Post">Post</button>
                   </div>
                 </div>
