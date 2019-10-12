@@ -9,17 +9,18 @@
     
   <div class="row">
     <!-- Empty div -->
-    <div class="col-md-2"></div>
+    <div class="col-lg-2"></div>
 
-    <div class="col-md-6">
+    <div class="col-lg-6">
       
 
         {% for image_item in images %}
                 <!-- Card -->
-          <div class="card mt-3 pb-2 mb-2">
+          <div class="card mt-5 pb-2 mb-2">
             <!-- Card header -->
-            <div class="card-footer text-dark font-weight-bold">
-                {{image_item.Author}}
+            <div class="card-footer pb-1 pt-1 text-dark font-weight-bold">
+                <img src="{{ image_item.author_profile.photo.url }}" alt="" class="rounded-circle img-fluid mr-1" style="width: 50px;">
+                 {{image_item.Author}}
               </div>
 
             <!-- Card image -->
@@ -55,11 +56,11 @@
 
                   {%csrf_token%}
                   <div class="form-row">
-                    <div class="col-md-10">
+                    <div class="col-lg-10">
                        {% bootstrap_form form%} 
                         <input type="hidden" value="{{image_item.pk}}" name="image_id">
                       </div>
-                    <div class="col-md-2 pt-4 pr-2">
+                    <div class="col-lg-2 pt-4 pr-2">
                         <button type="submit" class="btn btn-default btn-sm font-weight-bold" value="Post">Post</button>
                     </div>
                   </div>
@@ -74,8 +75,8 @@
           </div>
 
     <!-- empty div -->
-    <div class="col-md-3"></div>
-    <div class="col-md-1"></div>
+    <div class="col-lg-3"></div>
+    <div class="col-lg-1"></div>
 
   </div>
  </div>
@@ -92,7 +93,7 @@
 
                         <div class="row d-flex justify-content-center text-center">
 
-                            <div class="col-md-12 pt-5 mt-5">
+                            <div class="col-lg-12 pt-5 mt-5">
 
                                 <!-- Heading -->
                                 <h3 class="display-4 font-weight-bold white-text pt-5">Welcome to PicsGram</h3>
