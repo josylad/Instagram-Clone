@@ -20,9 +20,9 @@ class NewCommentForm(forms.ModelForm):
         widgets = {
           'comment': forms.Textarea(attrs={'rows':1, 'cols':10}),
         }
-        
 
-class UserUpdateForm(forms.ModelForm):
+
+class ProfileUpdateForm(forms.ModelForm):
     class Meta:
         model = Image
         exclude = []
