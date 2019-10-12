@@ -55,7 +55,25 @@ class Category(models.Model):
     class Meta:
         verbose_name = 'Category'
         verbose_name_plural = 'Categories'
+
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    bio = models.TextField()
+    photo = models.ImageField(upload_to = 'profile_pics/', blank=True, default='profile_pics/default.jpg')
+
+    def save_profile(self):
+        self.save()
+
+    def delete_profile(self):
+        self.delete()
     
+    def __str__(self):
+        return f'{self.user.username} Profile'
+    
+    class Meta:
+        verbose_name = 'Profile'
+        verbose_name_plural = 'Profiles'
+        
     
 class Image(models.Model):
     image_file = models.ImageField(upload_to = 'images/', default='images/beagle.jpg')
@@ -64,6 +82,8 @@ class Image(models.Model):
     location = models.ForeignKey(Location)
     pub_date = models.DateTimeField(auto_now_add=True)
     Author = models.ForeignKey(User, on_delete=models.CASCADE, blank=True)
+    author_profile = models.ForeignKey(Profile, default='1')
+
 
        
     def save_image(self):
@@ -138,24 +158,3 @@ class Comment(models.Model):
         verbose_name_plural = 'Comments'
         
         
-class Profile(models.Model):
-    bio = models.TextField()
-    photo = models.ImageField(upload_to = 'images/', blank=True)
-
-    def save_profile(self):
-        self.save()
-
-    def delete_profile(self):
-        self.delete()
-    
-    @classmethod
-    def get_profile(cls):
-        profiles = cls.objects.all()
-        return profiles
-    
-    def __str__(self):
-        return self.bio
-    
-    class Meta:
-        verbose_name = 'Profile'
-        verbose_name_plural = 'Profiles'
