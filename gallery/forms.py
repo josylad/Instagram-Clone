@@ -1,5 +1,6 @@
 from django import forms
 from .models import Image, Comment, Profile
+from django.contrib.auth.models import User
 
 
 class NewsLetterForm(forms.Form):
@@ -10,7 +11,10 @@ class NewsLetterForm(forms.Form):
 class NewImageForm(forms.ModelForm):
     class Meta:
         model = Image
-        exclude = ['Author', 'image_name', 'pub_date']
+        exclude = ['Author', 'image_name', 'pub_date', 'author_profile', 'location']
+        widgets = {
+          'description': forms.Textarea(attrs={'rows':4, 'cols':10,}),
+        }
         
 
 class NewCommentForm(forms.ModelForm):
@@ -24,5 +28,8 @@ class NewCommentForm(forms.ModelForm):
 
 class ProfileUpdateForm(forms.ModelForm):
     class Meta:
-        model = Image
-        exclude = []
+        model = Profile
+        exclude = ['user']
+        widgets = {
+          'bio': forms.Textarea(attrs={'rows':2, 'cols':10,}),
+        }

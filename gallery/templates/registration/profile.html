@@ -1,16 +1,35 @@
 {%extends "registration/layout.html"%}
+{% load bootstrap4 %}
 
 {% block content %}
-<div class="container mb-4 pb-4" style="height: 60vh;">
+<div class="container mb-4 pb-4" style="height: 100%;">
   <div class="row">
     <!-- Empty div -->
     <div class="col-lg-3"></div>
 
     <div class="col-lg-6 mt-4 pt-2 ">
-        <img src="{{ user.profile.photo.url }}" alt="" class="d-flex justify-content-start rounded-circle img-fluid mr-1" style="width: 100px;">
-            <h2> {{user.username}} </h2>
-      <p> {{user.email}} </p>
-       <p> {{ user.profile.bio }}  </p>
+        <div class="pb-2">
+        <img src="{{ user.profile.photo.url }}" alt="" class="d-flex justify-content-start rounded-circle mb-1 img-fluid mr-1" style="width: 150px;">
+            <h4> Username: {{user.username}} </h4>
+      <p> Email: {{user.email}} </p>
+       <p> Bio: {{ user.profile.bio}}  </p>
+            <hr>
+    </div>
+
+       <!-- profile update form  -->
+        <h4 class="font-weight-bold">Update Your Profile</h4>
+        <hr class="">
+        <form  method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {% bootstrap_form form%}
+
+        <div class="form-group">
+          <input type="submit" class="btn btn-primary btn-sm" value="Update">
+        </div>
+
+        <input type="hidden" name="next" value="{{next}}">
+
+      </form>
 
     </div>
 

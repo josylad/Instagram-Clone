@@ -2,7 +2,7 @@ from django.db import models
 import datetime as dt
 from django.contrib.auth.models import User
 from tinymce.models import HTMLField
-
+from PIL import Image
 
 # Create your models here.
 
@@ -56,19 +56,26 @@ class Category(models.Model):
         verbose_name = 'Category'
         verbose_name_plural = 'Categories'
 
+
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    bio = models.TextField()
+    bio = models.TextField(blank=True)
     photo = models.ImageField(upload_to = 'profile_pics/', blank=True, default='profile_pics/default.jpg')
 
     def save_profile(self):
         self.save()
+        
+        img = Image.open(self.photo.path)
+        if img.height > 300 or img.width > 300:
+            output_size = (300, 300)
+            img.thumbnail(output_size)
+            img.save(self.photo.path)
 
     def delete_profile(self):
         self.delete()
     
     def __str__(self):
-        return f'{self.user.username} Profile'
+        return self.bio
     
     class Meta:
         verbose_name = 'Profile'
@@ -83,7 +90,6 @@ class Image(models.Model):
     pub_date = models.DateTimeField(auto_now_add=True)
     Author = models.ForeignKey(User, on_delete=models.CASCADE, blank=True)
     author_profile = models.ForeignKey(Profile, default='1')
-
 
        
     def save_image(self):
@@ -100,11 +106,6 @@ class Image(models.Model):
     @classmethod
     def search_images(cls, search_term):
         images = cls.objects.filter(description__icontains=search_term)
-        return images
-    
-    @classmethod
-    def search_by_location(cls, location):
-        images = cls.objects.filter(location__location=location)
         return images
     
     @classmethod

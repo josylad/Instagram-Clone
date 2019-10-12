@@ -3,10 +3,10 @@ from django.templatetags.static import static
 from django.shortcuts import render, redirect, render_to_response
 from django.http import HttpResponse, Http404
 import datetime as dt
-from .models import Location, Image, Category, Comment
+from .models import Location, Image, Comment, Profile
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.decorators import login_required
-from .forms import NewImageForm, NewsLetterForm, NewCommentForm
+from .forms import NewImageForm, NewsLetterForm, NewCommentForm, ProfileUpdateForm
 
 
 # Create your views here.
@@ -77,15 +77,6 @@ def get_image(request, id):
     return render(request, "images.html", {"image":image, "form":form, "comments":comments})
     
 
-
-def category(request, category):
-    images = Image.get_by_category(category)
-    locations = Location.get_location()
-    message = f"{category}"
-    return render(request, 'category.html', {"message":message, "images":images, "locations":locations})
-
-
-
 @login_required(login_url='/accounts/login/')
 def new_image(request):
     current_user = request.user
@@ -104,5 +95,15 @@ def new_image(request):
 
 @login_required(login_url='/accounts/login/')
 def user_profiles(request):
+    if request.method == 'POST':
+        form = ProfileUpdateForm(request.POST, request.FILES, instance=request.user.profile)
+        if form.is_valid():
+            profile = form.save(commit=False)
+            profile.save()
+            # messages.success(request, f'Your account has been updated.')
+        return redirect('profile')
+        
+    else:
+        form = ProfileUpdateForm()
     
-    return render(request, 'registration/profile.html')
+    return render(request, 'registration/profile.html', {"form":form})
