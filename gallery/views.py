@@ -16,9 +16,7 @@ def index(request):
     date = dt.date.today()
     images = Image.get_images()
     comments = Comment.get_comment()
-    location = Location.get_location()
-    locations = Location.get_location()
-    
+  
     current_user = request.user 
     if request.method == 'POST':
         form = NewCommentForm(request.POST, auto_id=False)
@@ -33,7 +31,7 @@ def index(request):
     else:
         form = NewCommentForm(auto_id=False)
 
-    return render(request, 'index.html', {"date": date, "images":images, "location": location, "locations": locations, "comments":comments, "form": form,})
+    return render(request, 'index.html', {"date": date, "images":images, "comments":comments, "form": form,})
 
 
 @login_required(login_url='/accounts/login/')
@@ -53,36 +51,31 @@ def search_images(request):
 
 @login_required(login_url='/accounts/login/')
 def get_image(request, id):
-        locations = Location.get_location()
-        try:
-            image = Image.objects.get(pk = id)
-            print(image)
-            
-        except ObjectDoesNotExist:
-            raise Http404()
+    comments = Comment.get_comment()
+
+    try:
+        image = Image.objects.get(pk = id)
+        print(image)
         
-        current_user = request.user 
-        if request.method == 'POST':
-            form = NewCommentForm(request.POST, auto_id=False)
-            img_id = request.POST['image_id']
-            if form.is_valid():
-                comment = form.save(commit=False)
-                comment.author = current_user
-                image = Image.get_image(img_id)
-                comment.image = image
-                comment.save()
-            return redirect('get_image')
-        else:
-            form = NewCommentForm(auto_id=False)
-        
-        return render(request, "images.html", {"image":image, "locations":locations, "form":form})
+    except ObjectDoesNotExist:
+        raise Http404()
     
+    current_user = request.user 
+    if request.method == 'POST':
+        form = NewCommentForm(request.POST, auto_id=False)
+        img_id = request.POST['image_id']
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.author = current_user
+            image = Image.get_image(img_id)
+            comment.image = image
+            comment.save()
+        return redirect('/image/img_id')
+    else:
+        form = NewCommentForm(auto_id=False)
     
-def location(request, location):
-    images = Image.search_by_location(location)
-    locations = Location.get_location()
-    message = f"{location}"
-    return render(request, 'locations.html', {"message":message, "images":images, "locations":locations})
+    return render(request, "images.html", {"image":image, "form":form, "comments":comments})
+    
 
 
 def category(request, category):
@@ -91,12 +84,6 @@ def category(request, category):
     message = f"{category}"
     return render(request, 'category.html', {"message":message, "images":images, "locations":locations})
 
-
-def navlocation(request):
-    
-    locations = Location.get_location()
-
-    return render(request, 'navbar.html', {"locations": locations})
 
 
 @login_required(login_url='/accounts/login/')
@@ -113,3 +100,9 @@ def new_image(request):
     else:
         form = NewImageForm()
     return render(request, 'new-image.html', {"form": form})
+
+
+@login_required(login_url='/accounts/login/')
+def user_profiles(request):
+    
+    return render(request, 'registration/profile.html')
