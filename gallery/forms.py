@@ -1,5 +1,5 @@
 from django import forms
-from .models import Image, Comment
+from .models import Image, Comment, Profile
 
 
 class NewsLetterForm(forms.Form):
@@ -21,3 +21,4 @@ class NewCommentForm(forms.ModelForm):
           'comment': forms.Textarea(attrs={'rows':1, 'cols':10}),
         }
         
+
