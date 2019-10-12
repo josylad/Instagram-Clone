@@ -22,3 +22,7 @@ class NewCommentForm(forms.ModelForm):
         }
         
 
+class UserUpdateForm(forms.ModelForm):
+    class Meta:
+        model = Image
+        exclude = []
