@@ -11,7 +11,7 @@ class NewsLetterForm(forms.Form):
 class NewImageForm(forms.ModelForm):
     class Meta:
         model = Image
-        exclude = ['Author', 'image_name', 'pub_date', 'author_profile', 'location']
+        exclude = ['Author', 'image_name', 'pub_date', 'author_profile']
         widgets = {
           'description': forms.Textarea(attrs={'rows':4, 'cols':10,}),
         }
