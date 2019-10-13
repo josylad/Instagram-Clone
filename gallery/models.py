@@ -7,56 +7,6 @@ from PIL import Image
 # Create your models here.
 
 
-
-class Location(models.Model):
-    location = models.CharField(max_length= 255, blank =True)
-    
-    def save_location(self):
-        self.save()
-
-    def delete_location(self):
-        self.delete()
-    
-    @classmethod
-    def get_location(cls):
-        locations = cls.objects.all()
-        return locations
-    
-    def __str__(self):
-        return self.location
-    
-    class Meta:
-        verbose_name = 'Location'
-        verbose_name_plural = 'Locations'
-      
-
-class Category(models.Model):
-    category = models.CharField(max_length= 255)
-    
-    def save_category(self):
-        self.save()
-
-    def delete_category(self):
-        self.delete()
-        
-    @classmethod
-    def get_category(cls):
-        categories = cls.objects.all()
-        return categories
-    
-    @classmethod
-    def search_by_category(cls, search_term):
-        images = cls.objects.filter(category__icontains=search_term)
-        return images
-    
-    def __str__(self):
-        return self.category
-   
-    class Meta:
-        verbose_name = 'Category'
-        verbose_name_plural = 'Categories'
-
-
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     bio = models.TextField(blank=True)
@@ -86,7 +36,6 @@ class Image(models.Model):
     image_file = models.ImageField(upload_to = 'images/', default='images/beagle.jpg')
     image_name = models.CharField(max_length=255)
     description = models.TextField()
-    location = models.ForeignKey(Location, blank=True)
     pub_date = models.DateTimeField(auto_now_add=True)
     Author = models.ForeignKey(User, on_delete=models.CASCADE, blank=True)
     author_profile = models.ForeignKey(Profile, default='1')
@@ -108,10 +57,7 @@ class Image(models.Model):
         images = cls.objects.filter(description__icontains=search_term)
         return images
     
-    @classmethod
-    def get_by_category(cls, category):
-        images = cls.objects.filter(category__category=category)
-        return images
+
     
     @classmethod
     def get_by_author(cls, Author):
@@ -120,7 +66,6 @@ class Image(models.Model):
     
     @classmethod
     def get_image(request, id):
-        locations = Location.get_location()
         try:
             image = Image.objects.get(pk = id)
             print(image)
@@ -134,7 +79,7 @@ class Image(models.Model):
         return self.image_name
     
     class Meta:
-        ordering = ['pub_date']
+        ordering = ['-pub_date']
         verbose_name = 'My image'
         verbose_name_plural = 'Images'
 
