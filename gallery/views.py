@@ -95,6 +95,10 @@ def new_image(request):
 
 @login_required(login_url='/accounts/login/')
 def user_profiles(request):
+    current_user = request.user
+    Author = current_user
+    images = Image.get_by_author(Author)
+    
     if request.method == 'POST':
         form = ProfileUpdateForm(request.POST, request.FILES, instance=request.user.profile)
         if form.is_valid():
@@ -106,4 +110,4 @@ def user_profiles(request):
     else:
         form = ProfileUpdateForm()
     
-    return render(request, 'registration/profile.html', {"form":form})
+    return render(request, 'registration/profile.html', {"form":form, "images":images})
