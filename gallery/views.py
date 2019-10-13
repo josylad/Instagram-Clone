@@ -3,7 +3,7 @@ from django.templatetags.static import static
 from django.shortcuts import render, redirect, render_to_response
 from django.http import HttpResponse, Http404
 import datetime as dt
-from .models import Location, Image, Comment, Profile
+from .models import Image, Comment, Profile
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.decorators import login_required
 from .forms import NewImageForm, NewsLetterForm, NewCommentForm, ProfileUpdateForm
@@ -27,7 +27,7 @@ def index(request):
             image = Image.get_image(img_id)
             comment.image = image
             comment.save()
-        return redirect('index')
+        return redirect('/')
     else:
         form = NewCommentForm(auto_id=False)
 
@@ -36,17 +36,16 @@ def index(request):
 
 @login_required(login_url='/accounts/login/')
 def search_images(request):
-    locations = Location.get_location()
     if 'keyword' in request.GET and request.GET["keyword"]:
         search_term = request.GET.get("keyword")
         searched_images = Image.search_images(search_term)
         message = f"{search_term}"
 
-        return render(request, 'search.html', {"message":message,"images": searched_images, "locations": locations})
+        return render(request, 'search.html', {"message":message,"images": searched_images})
 
     else:
         message = "You haven't searched for any term"
-        return render(request, 'search.html', {"message": message, "locations":locations})
+        return render(request, 'search.html', {"message": message})
 
 
 @login_required(login_url='/accounts/login/')
@@ -55,7 +54,7 @@ def get_image(request, id):
 
     try:
         image = Image.objects.get(pk = id)
-        print(image)
+        # print(image)
         
     except ObjectDoesNotExist:
         raise Http404()
@@ -70,7 +69,7 @@ def get_image(request, id):
             image = Image.get_image(img_id)
             comment.image = image
             comment.save()
-        return redirect('/image/img_id')
+        return redirect('get_image')
     else:
         form = NewCommentForm(auto_id=False)
     
