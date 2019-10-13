@@ -10,9 +10,9 @@
     <div class="col-lg-6">
 
           <!-- Card -->
-          <div class="card mt-5 pb-2 mb-2">
+          <div class="card mt-2 pb-2 mb-2">
               <!-- Card header -->
-              <div class="card-footer pt-1 pb-1 text-dark font-weight-bold">
+              <div class="card-footer pt-1 pb-1 text-dark font-weight-bold" id="{{image.id}}">
                   <img src="{{ image.author_profile.photo.url }}" alt="" class="rounded-circle img-fluid mr-1" style="width: 50px;">
                   {{image.Author}}
                 </div>
@@ -47,7 +47,7 @@
             {% for comment_item in comments %}
             
               {% if image.pk == comment_item.image.pk%}
-            <p> {{comment_item.author}} <span class=""> {{comment_item.comment}} </span> </p>
+            <p> {{comment_item.author}} <span class="text-black-50"> {{comment_item.comment}} </span> </p>
             {% endif %}
 
             {% endfor %}
