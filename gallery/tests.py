@@ -1,26 +1,11 @@
+from django.db import models
 from django.test import TestCase
-from .models import Category, Image, Location
+from .models import Profile, Image, Location
+from django.contrib.auth.models import User
+
 # Create your tests here.
 
-class CategoryTestCase(TestCase):
-    
-    def setUp(self):
-        self.category = Category(category = 'Animals')
-        
-    def test_instance(self):
-        self.assertTrue(isinstance(self.category, Category))
-        
-    def test_save_categories(self):
-        self.category.save_category()
-        all_categories = Category.objects.all()
-        self.assertTrue(len(all_categories) > 0)
-        
-    def test_search_category(self):
-        self.category.save_category()
-        images = Category.objects.filter(category__icontains='animals')
-        self.assertTrue(self.category, images)
-        
-        
+          
 
 class LocationTestCase(TestCase):
     
@@ -48,11 +33,9 @@ class ImageTestCase(TestCase):
         self.new_location = Location(location = 'Lagos')
         self.new_location.save()
         
-        self.category = Category(category = 'Animals')
-        self.category.save()
         
         # Creating a new Image and saving it
-        self.image= Image(image_name = 'Beagle', description ='Lovely dog', image_file ='images/beagle.jpg', location = self.new_location, category = self.category)
+        self.image= Image(image_name = 'Beagle', description ='Lovely dog', image_file ='images/beagle.jpg', location = self.new_location)
         self.image.save_image()
 
 
