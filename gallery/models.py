@@ -86,7 +86,7 @@ class Image(models.Model):
     image_file = models.ImageField(upload_to = 'images/', default='images/beagle.jpg')
     image_name = models.CharField(max_length=255)
     description = models.TextField()
-    location = models.ForeignKey(Location)
+    location = models.ForeignKey(Location, blank=True)
     pub_date = models.DateTimeField(auto_now_add=True)
     Author = models.ForeignKey(User, on_delete=models.CASCADE, blank=True)
     author_profile = models.ForeignKey(Profile, default='1')
@@ -114,6 +114,11 @@ class Image(models.Model):
         return images
     
     @classmethod
+    def get_by_author(cls, Author):
+        images = cls.objects.filter(Author=Author)
+        return images
+    
+    @classmethod
     def get_image(request, id):
         locations = Location.get_location()
         try:
@@ -129,7 +134,7 @@ class Image(models.Model):
         return self.image_name
     
     class Meta:
-        ordering = ['image_name']
+        ordering = ['pub_date']
         verbose_name = 'My image'
         verbose_name_plural = 'Images'
 
