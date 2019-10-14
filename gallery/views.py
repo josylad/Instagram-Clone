@@ -75,17 +75,14 @@ def get_image(request, id):
     
     current_user = request.user 
     if request.method == 'POST':
-        print('***********0***********')
         form = NewCommentForm(request.POST, auto_id=False)
         img_id = request.POST['image_id']
         if form.is_valid():
-            print('***********1***********')
             comment = form.save(commit=False)
             comment.author = current_user
             image = Image.get_image(img_id)
             comment.image = image
             comment.save()
-            print('***********2***********')
             return redirect(f'/image/{img_id}',)
     else:
         form = NewCommentForm(auto_id=False)
