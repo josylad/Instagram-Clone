@@ -25,7 +25,7 @@ class Profile(models.Model):
         self.delete()
     
     def __str__(self):
-        return self.bio
+        return (self.user, self.bio, self.photo)
     
     class Meta:
         verbose_name = 'Profile'
@@ -39,8 +39,9 @@ class Image(models.Model):
     pub_date = models.DateTimeField(auto_now_add=True)
     Author = models.ForeignKey(User, on_delete=models.CASCADE, blank=True)
     author_profile = models.ForeignKey(Profile, default='1')
+    likes = models.ManyToManyField(User, related_name = 'likes', blank = True)
 
-       
+        
     def save_image(self):
         self.save()
     
@@ -57,12 +58,14 @@ class Image(models.Model):
         images = cls.objects.filter(description__icontains=search_term)
         return images
     
-
     
     @classmethod
     def get_by_author(cls, Author):
         images = cls.objects.filter(Author=Author)
         return images
+    
+    def total_likes(self):
+        self.likes.count()
     
     @classmethod
     def get_image(request, id):
@@ -85,7 +88,7 @@ class Image(models.Model):
 
 
 class Comment(models.Model):
-    comment = models.TextField()
+    comment = models.TextField(blank=True)
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     image = models.ForeignKey(Image, on_delete=models.CASCADE)
     pub_date = models.DateTimeField(auto_now_add=True)
