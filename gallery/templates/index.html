@@ -88,9 +88,9 @@
     <div class="col-lg-3 mt-2 pt-2 mr-2 pr-2 sticky">
         <table>
             <tr>
-              <td>            <img src="{{ user.profile.photo.url }}" alt="{{user.username}} photo" class="rounded-circle img-fluid mr-1" style="width: 60px;">
+              <td> <a href="{%url 'profile'%}"> <img src="{{ user.profile.photo.url }}" alt="{{user.username}} photo" class="rounded-circle img-fluid mr-1" style="width: 60px;"></a>
              </td>
-             <td class="ml-2 pl-2"><span class="font-weight-bold pl-0 ml-0"> {{user.username}} </span> <br>
+             <td class="ml-2 pl-2"><span class="font-weight-bold pl-0 ml-0"> <a href="{%url 'profile'%}">{{user.username}} </a> </span> <br>
               {{user.first_name}} {{user.last_name}}</td>
             </tr>
           </table>
