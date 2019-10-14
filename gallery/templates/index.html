@@ -1,5 +1,6 @@
 {%extends 'layout.html'%}
-{% load bootstrap4 %}
+{% load crispy_forms_tags %}
+
 
 {% block content %}
 {% if user.is_authenticated %}
@@ -12,13 +13,12 @@
     <div class="col-lg-2"></div>
 
     <div class="col-lg-6">
-      
-
+        
         {% for image_item in images %}
                 <!-- Card -->
-          <div class="card mt-2 pb-2 mb-4">
+          <div class="card mt-2 pb-2 mb-4 white">
             <!-- Card header -->
-            <div class="card-footer pb-1 pt-1 text-dark font-weight-bold" id="{{image_item.id}}">
+            <div class="card-footer pb-1 pt-1 text-dark font-weight-bold white">
                 <img src="{{ image_item.author_profile.photo.url }}" alt="" class="rounded-circle img-fluid mr-1" style="width: 50px;">
                  {{image_item.Author}}
               </div>
@@ -33,9 +33,17 @@
 
             <!-- Card content -->
             <div class="card-body">
-
+                <a class='info' href="#{% url 'like_image' image_item.id %}">
+                    {%if image_item.likes.id == user.id%}
+                    <i class="fas fa-heart" style="font-size:20px;" class="success"></i>
+                    {%else%}
+                    <i class="far fa-heart" style="font-size:20px;" class="success"></i>
+                    {%endif%}
+                  </a>
+                  
+              <!-- End of like button -->
               <!-- Title -->
-              <p class="card-title font-weight-bold">{{ image_item.Author }} <span class="card-text ml-2"> {{ image_item.description }} </span></p> 
+              <p class="card-title font-weight-bold" id="{{image_item.id}}">{{ image_item.Author }} <span class="card-text ml-2"> {{ image_item.description }} </span></p> 
               <!-- Text -->
               <!-- <p class="card-text">{{ image_item.description }}</p> -->
               <!-- Button -->
@@ -51,13 +59,15 @@
             </div>
 
             <!-- Card footer -->
-              <div class="card-footer text-muted text-center">
-                  <form  action="{%url 'index'  %}" method="post" enctype="multipart/form-data">
+              <div class="card-footer text-muted text-center white">
+                  <form  action="{%url 'index' %}" method="post" enctype="multipart/form-data">
 
                   {%csrf_token%}
                   <div class="form-row">
                     <div class="col-lg-10">
-                       {% bootstrap_form form%} 
+
+                        {{ form.comment|as_crispy_field }}
+
                         <input type="hidden" value="{{image_item.pk}}" name="image_id">
                       </div>
                     <div class="col-lg-2 pt-4 pr-2">
@@ -75,7 +85,18 @@
           </div>
 
     <!-- empty div -->
-    <div class="col-lg-3"></div>
+    <div class="col-lg-3 mt-2 pt-2 mr-2 pr-2 sticky">
+        <table>
+            <tr>
+              <td>            <img src="{{ user.profile.photo.url }}" alt="{{user.username}} photo" class="rounded-circle img-fluid mr-1" style="width: 60px;">
+             </td>
+             <td class="ml-2 pl-2"><span class="font-weight-bold pl-0 ml-0"> {{user.username}} </span> <br>
+              {{user.first_name}} {{user.last_name}}</td>
+            </tr>
+          </table>
+        
+    </div>
+
     <div class="col-lg-1"></div>
 
   </div>
