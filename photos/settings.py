@@ -76,6 +76,7 @@ INSTALLED_APPS = [
     'django.contrib.admin',
     'bootstrap4',
     'tinymce',
+    'crispy_forms',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -180,3 +181,5 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Configure Django App for Heroku.
 django_heroku.settings(locals())
+
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
