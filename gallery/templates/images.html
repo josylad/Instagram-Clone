@@ -57,7 +57,7 @@
 
           <!-- Card footer -->
             <div class="card-footer text-muted text-center">
-                <form  action="{%url 'index'  %}" method="post" enctype="multipart/form-data">
+                <form  action="{% url 'image_results' image.pk %}" method="post" enctype="multipart/form-data">
 
                 {%csrf_token%}
                 <div class="form-row">

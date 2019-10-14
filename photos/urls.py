@@ -16,10 +16,19 @@ Including another URLconf
 from django.conf.urls import url, include
 from django.contrib import admin
 from django.contrib.auth import views
+from registration.backends.simple.views import RegistrationView
+from gallery.forms import RegistrationForm
+
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'', include('gallery.urls')),
+    url(r'^accounts/register/$',
+        RegistrationView.as_view(
+            form_class=RegistrationForm
+        ),
+        name='registration_register',
+    ),
     url(r'^accounts/', include('registration.backends.simple.urls')),
     url(r'^logout/$', views.logout, {"next_page": '/'}), 
     url(r'^tinymce/', include('tinymce.urls')),
