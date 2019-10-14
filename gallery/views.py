@@ -1,13 +1,13 @@
 from django.conf import settings
 from django.templatetags.static import static
-from django.shortcuts import render, redirect, render_to_response
+from django.shortcuts import render, redirect, render_to_response, HttpResponseRedirect
 from django.http import HttpResponse, Http404
 import datetime as dt
 from .models import Image, Comment, Profile
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.decorators import login_required
-from .forms import NewImageForm, NewsLetterForm, NewCommentForm, ProfileUpdateForm
-
+from .forms import NewImageForm, NewCommentForm, ProfileUpdateForm, RegistrationForm
+from django.contrib import messages
 
 # Create your views here.
 
@@ -16,7 +16,7 @@ def index(request):
     date = dt.date.today()
     images = Image.get_images()
     comments = Comment.get_comment()
-  
+    
     current_user = request.user 
     if request.method == 'POST':
         form = NewCommentForm(request.POST, auto_id=False)
@@ -27,12 +27,26 @@ def index(request):
             image = Image.get_image(img_id)
             comment.image = image
             comment.save()
-        return redirect('/')
+        return redirect(f'/#{img_id}',)
     else:
         form = NewCommentForm(auto_id=False)
 
     return render(request, 'index.html', {"date": date, "images":images, "comments":comments, "form": form,})
 
+
+def register(request):
+    if request.method == 'POST':
+        form = RegistrationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            username = form.cleaned_data.get('username')
+            messages.success(request, f'Account created for {username}')
+            return redirect('/')
+        
+    else:
+        form = RegistrationForm()
+    return render(request, 'registration/registration_form.html', {'form':form})
+    
 
 @login_required(login_url='/accounts/login/')
 def search_images(request):
@@ -61,15 +75,18 @@ def get_image(request, id):
     
     current_user = request.user 
     if request.method == 'POST':
+        print('***********0***********')
         form = NewCommentForm(request.POST, auto_id=False)
         img_id = request.POST['image_id']
         if form.is_valid():
+            print('***********1***********')
             comment = form.save(commit=False)
             comment.author = current_user
             image = Image.get_image(img_id)
             comment.image = image
             comment.save()
-        return redirect('get_image')
+            print('***********2***********')
+            return redirect(f'/image/{img_id}',)
     else:
         form = NewCommentForm(auto_id=False)
     
@@ -103,10 +120,27 @@ def user_profiles(request):
         if form.is_valid():
             profile = form.save(commit=False)
             profile.save()
-            # messages.success(request, f'Your account has been updated.')
         return redirect('profile')
         
     else:
         form = ProfileUpdateForm()
     
     return render(request, 'registration/profile.html', {"form":form, "images":images})
+
+
+@login_required(login_url='/accounts/login/')
+def like_image(request, id):
+    '''
+    Method that likes an image.
+    '''
+    image = get_object_or_404(Image, id=request.POST.get('image_id'))
+    
+    is_liked = False
+    if image.likes.filter(id = request.user.id).exists():
+        image.likes.remove(request.user)
+        is_liked = False
+    else:
+        image.likes.add(request.user)
+        is_liked = True
+    
+    return ("index")
