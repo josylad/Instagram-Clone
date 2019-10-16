@@ -39,8 +39,10 @@ def register(request):
     if request.method == 'POST':
         form = RegisterForm(request.POST)
         if form.is_valid():
+            name = form.cleaned_data['first_name']
+            email = form.cleaned_data['email']
             form.save()
-            send_welcome_email(first_name, email)
+            send_welcome_email(name, email)
             username = form.cleaned_data.get('username')
             messages.success(request, f'Account created for {username}')
             return redirect('/')
