@@ -19,7 +19,7 @@
 
               <!-- Card image -->
               <div class="view overlay">
-                  {% if image_item.image_file.url %}
+                  {% if image_item.image_file %}
                   <img class="card-img-top pl-1 pr-1" src="{{image_item.image_file.url}}" alt="{{ image_item.image_name }}">
                   {% else %}
                   <img  class="card-img-top" src="https://source.unsplash.com/1600x900/?fun,vacation" alt="{{ image_item.image_name }}">
