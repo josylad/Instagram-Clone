@@ -26,7 +26,11 @@
 
             <!-- Card image -->
             <div class="view overlay">
-              <img class="card-img-top" src="{{image_item.image_file.url}}" alt="{{ image_item.image_name }}">
+              {% if image_item.image_file.url %}
+              <img class="card-img-top pl-1 pr-1" src="{{image_item.image_file.url}}" alt="{{ image_item.image_name }}">
+              {% else %}
+              <img  class="card-img-top" src="https://source.unsplash.com/1600x900/?fun,vacation" alt="{{ image_item.image_name }}">
+              {% endif %}
               <a href="/image/{{image_item.id}}">
                 <div class="mask rgba-white-slight"></div>
               </a>
@@ -71,7 +75,7 @@
 
                         <input type="hidden" value="{{image_item.pk}}" name="image_id">
                       </div>
-                    <div class="col-lg-2 pt-4 pr-2">
+                    <div class="col-lg-2 pr-2">
                         <button type="submit" class="btn btn-default btn-sm font-weight-bold" value="Post">Post</button>
                     </div>
                   </div>
