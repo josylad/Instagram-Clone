@@ -63,3 +63,11 @@ html, body {
   display: block;
   max-width: 100%;
 }
+
+.col-form-label {
+  display: none;
+}
+
+label {
+  display: none;
+}
