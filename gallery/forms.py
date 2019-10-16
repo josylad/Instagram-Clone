@@ -45,7 +45,7 @@ class ProfileUpdateForm(forms.ModelForm):
         }
         
         
-class RegistrationForm(RegistrationForm):
+class RegisterForm(RegistrationForm):
     first_name = forms.CharField(max_length=255)
     last_name = forms.CharField(max_length=255)
     
