@@ -6,8 +6,9 @@ import datetime as dt
 from .models import Image, Comment, Profile
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.decorators import login_required
-from .forms import NewImageForm, NewCommentForm, ProfileUpdateForm, RegistrationForm
+from .forms import NewImageForm, NewCommentForm, ProfileUpdateForm, RegisterForm
 from django.contrib import messages
+from .email import send_welcome_email
 
 # Create your views here.
 
@@ -36,15 +37,16 @@ def index(request):
 
 def register(request):
     if request.method == 'POST':
-        form = RegistrationForm(request.POST)
+        form = RegisterForm(request.POST)
         if form.is_valid():
             form.save()
+            send_welcome_email(first_name, email)
             username = form.cleaned_data.get('username')
             messages.success(request, f'Account created for {username}')
             return redirect('/')
         
     else:
-        form = RegistrationForm()
+        form = RegisterForm()
     return render(request, 'registration/registration_form.html', {'form':form})
     
 
