@@ -25,7 +25,7 @@ class Profile(models.Model):
         self.delete()
     
     def __str__(self):
-        return (self.user, self.bio, self.photo)
+        return f'self.user, self.bio, self.photo'
     
     class Meta:
         verbose_name = 'Profile'
